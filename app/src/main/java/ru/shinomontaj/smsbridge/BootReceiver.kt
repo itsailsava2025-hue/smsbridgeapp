@@ -1,4 +1,3 @@
-\
 package ru.shinomontaj.smsbridge
 
 import android.content.BroadcastReceiver
