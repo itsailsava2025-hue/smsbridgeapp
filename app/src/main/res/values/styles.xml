@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.SmsBridge" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#E50914</item>
+        <item name="colorPrimaryVariant">#B00710</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+    </style>
+</resources>
