@@ -105,6 +105,15 @@ class MainActivity : AppCompatActivity() {
         return id
     }
 
+    private fun appVersionName(): String {
+        return try {
+            val info = packageManager.getPackageInfo(packageName, 0)
+            info.versionName ?: "1.0"
+        } catch (_: Throwable) {
+            "1.0"
+        }
+    }
+
     private fun doRegister(baseUrl: String, code: String) {
         val devId = deviceId()
         val url = "$baseUrl/api/sms-android.php"
@@ -113,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         payload.put("code", code)
         payload.put("device_id", devId)
         payload.put("model", android.os.Build.MODEL ?: "")
-        payload.put("app_version", BuildConfig.VERSION_NAME ?: "1.0")
+        payload.put("app_version", appVersionName())
 
         val body = payload.toString().toRequestBody("application/json".toMediaType())
         val req = Request.Builder().url(url).post(body).build()
