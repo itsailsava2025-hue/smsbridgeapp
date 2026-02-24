@@ -1,7 +1,9 @@
-name: Build APK
+name: Build Android APK
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -14,18 +16,25 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
 
-      - name: Fix gradle.properties name (RU)
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.7
+
+      - name: Fix gradle.properties filename if translated
         run: |
-          if [ -f "gradle.свойства" ]; then cp "gradle.свойства" "gradle.properties"; fi
+          if [ -f "gradle.свойства" ] && [ ! -f "gradle.properties" ]; then
+            mv "gradle.свойства" "gradle.properties"
+          fi
 
-      - name: Make gradlew executable
-        run: chmod +x gradlew
-
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon
+      - name: Build debug APK
+        run: gradle :app:assembleDebug --no-daemon -x lint
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
